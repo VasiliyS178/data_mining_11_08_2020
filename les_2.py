@@ -71,8 +71,8 @@ class GBBlogParse:
             self.visited_urls.add(url)
             self.current_url = url
             soap = BeautifulSoup(response.text, 'lxml')
-            if len(self.posts_data) > 5:
-                break
+            # if len(self.posts_data) > 5:
+            #     break
             self.posts_data.append(self.get_post_data(soap))
 
     # Извелечение данных страницы материала

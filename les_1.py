@@ -31,9 +31,11 @@ class Parser5ka:
     def download(self):
         data_for_save = {}
         params = {}
-        url_cat = self._domain + self._api_cat_path
-        categories = requests.get(url_cat, headers=self.headers, params=params).json()
         categories_dict = {}
+        url_cat = self._domain + self._api_cat_path
+
+        categories = requests.get(url_cat, headers=self.headers, params=params).json()
+
         for itm in categories:
             categories_dict[itm['parent_group_code']] = itm['parent_group_name']
         print(categories_dict)
@@ -45,18 +47,17 @@ class Parser5ka:
             url = self._domain + self._api_path
             while url:
                 response = requests.get(url, headers=self.headers, params=params)
-                if response.headers['Content-Type'] == 'application/json':
-                    data = response.json()
-                    params = {}
-                    url = data['next']
-                    self.products.extend(data['results'])
-                    time.sleep(0.1)
-                else:
-                    break
+                data = response.json()
+                params = {}
+                url = data['next']
+                self.products.extend(data['results'])
+                time.sleep(0.1)
 
             data_for_save['name'] = v
             data_for_save['code'] = k
             data_for_save['products'] = self.products
+
+            print(data_for_save)
 
             with open(f'{v}.json', 'w', encoding='utf-8') as f:
                 json.dump(data_for_save, f)

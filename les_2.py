@@ -93,7 +93,7 @@ class GBBlogParse:
     def save_to_mongo(self):
         self.collection.insert_many(self.posts_data)
 
-    # Метод для выборки статей за период
+    # Метод для выборки статей за период между start_date и end_date
     def get_posts_from_mongo_by_dates(self, start_date: str, end_date: str):
         self.collection.find({
             'post_date': {

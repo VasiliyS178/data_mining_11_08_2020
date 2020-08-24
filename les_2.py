@@ -84,7 +84,7 @@ class GBBlogParse:
         img = content.find('img')
         result['image'] = img.get('src') if img else None
         result['post_date'] = dt.datetime.fromisoformat(soap.find('time', attrs={'itemprop': 'datePublished'}).
-                                                     get('datetime'))
+                                                        get('datetime'))
         writer_info = soap.find('div', attrs={'class': 'row m-t'})
         result['writer_name'] = writer_info.find('div', attrs={'itemprop': 'author'}).text
         result['writer_url'] = f"{self.domain}{writer_info.find('a').get('href')}"
@@ -97,8 +97,8 @@ class GBBlogParse:
     def get_posts_from_mongo_by_dates(self, start_date: str, end_date: str):
         self.collection.find({
             'post_date': {
-            '$gte': dt.datetime.fromisoformat(start_date),
-            '$lte': dt.datetime.fromisoformat(end_date)
+                '$gte': dt.datetime.fromisoformat(start_date),
+                '$lte': dt.datetime.fromisoformat(end_date)
             }
         })
 

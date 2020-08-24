@@ -11,61 +11,78 @@
 "products": [{PRODUCT},  {PRODUCT}........] # список словарей товаров соответсвующих данной категории
 }
 """
+from typing import List, Dict
+import datetime as dt
+import os
+from pathlib import Path
 import json
 import requests
-import time
+from time import sleep
 
 
 class Parser5ka:
-    _domain = 'https://5ka.ru'
-    _api_path = '/api/v2/special_offers/'
-    _api_cat_path = '/api/v2/categories/'
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
-                      "Chrome/83.0.4103.116 YaBrowser/20.7.3.100 Yowser/2.5 Safari/537.36",
+    __urls = {
+        'categories': 'https://5ka.ru/api/v2/categories/',
+        'products': 'https://5ka.ru/api/v2/special_offers/'
     }
 
-    def __init__(self):
-        self.products = []
+    __params = {
+        'records_per_page': 50,
+        'categories': '',
+    }
 
-    def download(self):
-        data_for_save = {}
-        params = {}
-        categories_dict = {}
-        url_cat = self._domain + self._api_cat_path
+    __headers = {
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0) Gecko/20100101 Firefox/78.0",
+    }
 
-        categories = requests.get(url_cat, headers=self.headers, params=params).json()
+    __replaces = (',', '-', '/', '\\', '.', '"', "'", '*', '#',)
 
-        for itm in categories:
-            categories_dict[itm['parent_group_code']] = itm['parent_group_name']
-        print(categories_dict)
+    def __init__(self, folder_name='data'):
+        self.category = self.__get_categories()
+        # self.folder_data = Path(os.path.dirname(__file__)).join(folder_name)
 
-        for k, v in categories_dict.items():
-            params['records_per_page'] = 20
-            params['categories'] = int(k)
-            print(params)
-            url = self._domain + self._api_path
-            while url:
-                response = requests.get(url, headers=self.headers, params=params)
-                data = response.json()
-                params = {}
-                url = data['next']
-                self.products.extend(data['results'])
-                time.sleep(0.1)
+    def __get_categories(self) -> List[Dict[str, str]]:
+        response = requests.get(self.__urls['categories'])
+        return response.json()
 
-            data_for_save['name'] = v
-            data_for_save['code'] = k
-            data_for_save['products'] = self.products
+    def parse(self):
+        for category in self.category:
+            self.get_products(category)
 
-            print(data_for_save)
+    def get_products(self, category=None):
+        url = self.__urls['products']
+        params = self.__params
+        params['categories'] = int(category['parent_group_code'])
 
-            with open(f'{v}.json', 'w', encoding='utf-8') as f:
-                json.dump(data_for_save, f)
+        while url:
+            sleep(0.2)
+            response = requests.get(url, params=params, headers=self.__headers)
+            data = response.json()
+            url = data['next']
+            params = {}
 
-            self.products.clear()
-            data_for_save.clear()
+            if category.get('products'):
+                category['products'].extend(data['results'])
+            else:
+                category['products'] = data['results']
+            category['parse_date'] = dt.datetime.now().timestamp()
+            self.save_to_file(category)
+            print(1)
+
+    def save_to_file(self, category):
+        name = category['parent_group_name']
+        for itm in self.__replaces:
+            name = name.replace(itm, '')
+        name = '_'.join(name.split()).lower()
+
+        # file_path = os.path.join(self.folder_data, f'{name}.json')
+        file_path = os.path.join(f'{name}.json')
+
+        with open(file_path, 'w', encoding='UTF-8') as file:
+            json.dump(category, file, ensure_ascii=False)
 
 
 if __name__ == '__main__':
     parser = Parser5ka()
-    parser.download()
+    parser.parse()
+

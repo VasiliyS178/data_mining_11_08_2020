@@ -12,10 +12,10 @@ from pymongo import MongoClient
 
 
 # пайп для сохранения собранных данных в БД Монго
-class AvitoscrpPipeline:
+class ScrapyPipeline:
     def __init__(self):
         client = MongoClient('mongodb://localhost:27017')
-        self.db = client['avito_parse']
+        self.db = client['scrapy']
 
     def process_item(self, item, spider):
         collection = self.db[type(item).__name__]  # Даем имя коллекции монго такое же, как у item
@@ -25,7 +25,7 @@ class AvitoscrpPipeline:
 
 # пайп для скачивания изображений, должен запускаться до пайпа сохранения AvitoscrpPipeline
 # для этого поменять приоритет в settings на меньший
-class AvitoscrpImagePipeline(ImagesPipeline):
+class ScrapyImagePipeline(ImagesPipeline):
     # pip install Pillow  # поставить для работы с изображениями (скачивание, обрезка, миниатюры)
     def get_media_requests(self, item, info):
         for url in item.get('images', []):

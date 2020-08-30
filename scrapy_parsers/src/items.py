@@ -41,3 +41,14 @@ class AvitoItem(scrapy.Item):
     prices = scrapy.Field(input_processor=MapCompose(get_prices))
     address = scrapy.Field(output_processor=TakeFirst())
     params = scrapy.Field(output_processor=lambda x: dict(get_params(itm) for itm in x))
+
+
+class YoulaItem(scrapy.Item):
+    _id = scrapy.Field()
+    url = scrapy.Field()
+    author_url = scrapy.Field()
+    title = scrapy.Field()
+    images = scrapy.Field()
+    params = scrapy.Field()
+    descriptions = scrapy.Field()
+    price = scrapy.Field()

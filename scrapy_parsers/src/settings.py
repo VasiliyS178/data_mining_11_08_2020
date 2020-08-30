@@ -1,4 +1,4 @@
-# Scrapy settings for youlascrp project
+# Scrapy settings for src project
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
@@ -7,10 +7,10 @@
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
-BOT_NAME = 'youlascrp'
+BOT_NAME = 'src'
 
-SPIDER_MODULES = ['youlascrp.spiders']
-NEWSPIDER_MODULE = 'youlascrp.spiders'
+SPIDER_MODULES = ['src.spiders']
+NEWSPIDER_MODULE = 'src.spiders'
 
 LOG_ENABLE = True
 LOG_LEVEL = 'DEBUG'
@@ -40,20 +40,20 @@ TELNETCONSOLE_ENABLED = False
 
 # Override the default request headers:
 DEFAULT_REQUEST_HEADERS = {
-   'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
-   'Accept-Language': 'ru,en;q=0.9',
+  'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+  'Accept-Language': 'ru,en;q=0.9',
 }
 
 # Enable or disable spider middlewares
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 #SPIDER_MIDDLEWARES = {
-#    'youlascrp.middlewares.YoulascrpSpiderMiddleware': 543,
+#    'src.middlewares.AvitoscrpSpiderMiddleware': 543,
 #}
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #DOWNLOADER_MIDDLEWARES = {
-#    'youlascrp.middlewares.YoulascrpDownloaderMiddleware': 543,
+#    'src.middlewares.AvitoscrpDownloaderMiddleware': 543,
 #}
 
 # Enable or disable extensions
@@ -64,12 +64,11 @@ DEFAULT_REQUEST_HEADERS = {
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-
-IMAGES_STORE = 'youla_images'
+IMAGES_STORE = 'images'
 
 ITEM_PIPELINES = {
-   # 'youlascrp.pipelines.YoulaImagePipeline': 100,
-   'youlascrp.pipelines.YoulascrpPipeline': 300,
+    'src.pipelines.ScrapyImagePipeline': 100,
+    'src.pipelines.ScrapyPipeline': 300,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)

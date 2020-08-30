@@ -1,5 +1,5 @@
 import scrapy
-from avito_parser.avitoscrp.items import AvitoItem
+from scrapy_parsers.src.items import AvitoItem
 from scrapy.loader import ItemLoader
 
 

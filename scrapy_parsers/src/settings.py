@@ -13,7 +13,8 @@ SPIDER_MODULES = ['src.spiders']
 NEWSPIDER_MODULE = 'src.spiders'
 
 LOG_ENABLE = True
-LOG_LEVEL = 'DEBUG'
+# LOG_LEVEL = 'DEBUG'  # Логирование на время отладки
+LOG_LEVEL = 'INFO'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 USER_AGENT = 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:80.0) Gecko/20100101 Firefox/80.0'
@@ -53,9 +54,10 @@ DEFAULT_REQUEST_HEADERS = {
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
-    # 'src.middlewares.SrcDownloaderMiddleware': 543,
-    'scrapy.downloadermiddlewares.retry.RetryMiddleware': None,
-    'src.middlewares.Retry429Middleware': 100
+    'scrapy.downloadermiddlewares.retry.RetryMiddleware': None,  # стандартный мидл отключаем, но это не обязательно
+    # 'rotating_proxies.middlewares.RotatingProxyMiddleware': 610,  # мидл для работы через прокси
+    # 'rotating_proxies.middlewares.BanDetectionMiddleware': 620,  # мидл для работы через прокси
+    'src.middlewares.Retry429Middleware': 100,
 }
 
 # Enable or disable extensions
@@ -94,8 +96,12 @@ AUTOTHROTTLE_DEBUG = True
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
-#Настройки для автосмены прокси pip install scrapy_rotated_proxy
+# Настройки для автосмены прокси
+# Поставить библиотеку для работы с прокси
+# pip install scrapy_rotating_proxies
 # ROTATED_PROXY_ENABLE = True
+# Здесь прописать список прокси, через которые нужно ходить
 # ROTATING_PROXY_LIST = [
-#
+#     '110.74.222.71:44970',
+#     '200.54.42.3:8080'
 # ]

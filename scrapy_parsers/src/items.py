@@ -52,3 +52,18 @@ class YoulaItem(scrapy.Item):
     params = scrapy.Field()
     descriptions = scrapy.Field()
     price = scrapy.Field()
+
+
+class InstaPostItem(scrapy.Item):
+    _id = scrapy.Field()
+    data = scrapy.Field()
+
+
+class InstaHashTagItem(scrapy.Item):
+    _id = scrapy.Field()
+    data = scrapy.Field()
+
+
+class InstaUserItem(scrapy.Item):
+    _id = scrapy.Field()
+    data = scrapy.Field()

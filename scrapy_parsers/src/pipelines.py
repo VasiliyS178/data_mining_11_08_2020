@@ -37,5 +37,6 @@ class ScrapyImagePipeline(ImagesPipeline):
     # Метод для обработки скаченных изображений. Перезаписываем информацию в item об изображениий,
     # которые удалось скачать
     def item_completed(self, results, item, info):
-        item['images'] = [itm[1] for itm in results if itm[0]]
+        if item.get('images'):
+            item['images'] = [itm[1] for itm in results if itm[0]]
         return item

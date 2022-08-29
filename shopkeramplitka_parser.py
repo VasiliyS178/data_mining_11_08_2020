@@ -167,3 +167,4 @@ if __name__ == '__main__':
     print('Site shopkeramplitka.ru was parsed successfully')
     print(f'Total number of products in the catalog: {parser.products_count}')
     spark.stop()
+
